@@ -39,33 +39,20 @@ echo Running all tests..."\n\n
 #checkResult
 
 # Add tests below
-test "PINA: 0x00 => PORTC: 0x07, state: Init"
-set state = Start
+test "PINA: 0x00 => PORTB: 0x01, state: PressLED1"
+set state = Init
 setPINA 0x00
 continue 2
-expectPORTC 0x07
+expectPORTB 0x01
 checkResult
 
-test "PINA: 0x01 => PORTC: 0x08, state: Init"
-set state = Start
+test "PINA: 0x01 => PORTB: 0x02, state: PressLED2"
+set state = Init
 setPINA 0x01
 continue 2
-expectPORTC 0x08
+expectPORTB 0x02
 checkResult
 
-test "PINA: 0x02 => PORTC: 0x06, state: Init"
-set state = Start
-setPINA 0x02
-continue 2
-expectPORTC 0x06
-checkResult
-
-test "PINA: 0x03 => PORTC: 0x00, state: Init"
-set state = Start
-setPINA 0x03
-continue 2
-expectPORTB 0x00
-checkResult
 
 # Report on how many tests passed/tests ran
 set $passed=$tests-$failed

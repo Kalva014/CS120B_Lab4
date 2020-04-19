@@ -12,60 +12,42 @@
 #include "simAVRHeader.h"
 #endif
 
-enum States {Start, Init, ButtonPressed1, OnRelease1, ButtonPressed2} state;
+enum States {Init, LedPressed1, LedPressed2} state;
 
 void Tick() {
 	switch(state) { //transitions
-		case Start:
-			state = Init;
-			break;
 		case Init:
-			if((PINA & 0x01) == 0x01 ) {
-				state = ButtonPressed1;
-			}
-			else {
-				state = Init;
-			}
+			state = LedPressed1;
 			break;
-		case ButtonPressed1:
+		case LedPressed1:
 			if((PINA & 0x01) == 0x01) {
-				state = ButtonPressed1;
+				state = LedPressed2;
 			}
 			else {
-				state = OnRelease1;
+				state = LedPressed1;
 			}
 			break;
-		case OnRelease1:
-			if((PINA & 0x01) == 0x01) {
-				state = ButtonPressed2;
-			}
-			else {
-				state = OnRelease1;
-			}
-			break;
-		case ButtonPressed2:
+		case LedPressed2:
 			if((PINA & 0x01) == 0x01){
-				state = ButtonPressed2;
+				state = LedPressed1;
 			}
 			else {
-				state = Init;
+				state = LedPressed2;
 			}
 			break;
 		default:
+			state = LedPressed1;
 			break; 
 	}
 	switch(state) { //actions
 		case Init:
+			PORTB = 0x00;
+			break;
+		case LedPressed1:
 			PORTB = 0x01;
 			break;
-		case ButtonPressed1:
+		case LedPressed2:
 			PORTB = 0x02;
-			break;
-		case OnRelease1:
-			PORTB = 0x02;
-			break;
-		case ButtonPressed2:
-			PORTB = 0x01;
 			break;
 		default:
 			break;
@@ -77,10 +59,10 @@ int main(void) {
     /* Insert DDR and PORT initializations */
         DDRA = 0x00; PORTA = 0x00;
         DDRB = 0xFF; PORTB = 0x00;
-	state = Init; //Inital state
-	
+
     /* Insert your solution below */
     while (1) {
+	PORTB = 0x00;
 	Tick();
     }
     return 1;
