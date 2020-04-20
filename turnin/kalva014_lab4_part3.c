@@ -21,7 +21,7 @@ void Tick() {
 			state = Init;
 			break;
 		case Init:
-			if(((PINA & 0x02) == 0x02) && ((PINA & 0x01) != 0x01) && ((PINA & 0x00) != 0x00) && ((PINA & 0x07) != 0x07)) {
+			if(((PINA & 0x02) == 0x02) && ((PINA & 0x01) != 0x01) && ((PINA & 0x07) != 0x07)) {
 				state = PoundPressed; //FOR UNLOCKING WITH POUND
 			}
 			else if(((PINA & 0x02) != 0x02) && ((PINA & 0x01) != 0x01) && ((PINA & 0x00) != 0x00) && ((PINA & 0x07) == 0x07)) {
@@ -35,13 +35,13 @@ void Tick() {
 			state = PoundReleased;
 			break;
 		case PoundReleased:
-			if(((PINA & 0x02) != 0x02) && ((PINA & 0x01) == 0x01) && ((PINA & 0x00) != 0x00) && ((PINA & 0x07) != 0x07)) {
+			if(((PINA & 0x02) != 0x02) && ((PINA & 0x01) == 0x01) && ((PINA & 0x07) != 0x07)) {
 				state = WyePressed; //IF WYE IS PRESSED AND NOTHING ELSE IS PRESSED'
 			}
-			else if(((PINA & 0x02) == 0x02) && ((PINA & 0x01) != 0x01) && ((PINA & 0x00) != 0x00) && ((PINA & 0x07) != 0x07)) {
+			else if(((PINA & 0x02) == 0x02) && ((PINA & 0x01) != 0x01) && ((PINA & 0x07) != 0x07)) {
 				state = PoundReleased; //IF # IS STILL BEING HELD DOWN AND NOTHING ELSE IS PRESSED TO MESS UP THE COMBO
 			}
-			else if(((PINA & 0x00) == 0x00) || ((PINA & 0x07) == 0x07)) {
+			else {
 				state = Init; //IF MESSED UP COMBO
 			}
 			break;
@@ -79,6 +79,7 @@ void Tick() {
 		case PoundPressed:
 			break;
 		case PoundReleased:
+			PORTB = 0x01;
 			break;
 		case WyePressed:
 			PORTB = 0x01;
@@ -104,6 +105,7 @@ int main(void) {
 
     /* Insert your solution below */
     while (1) {
+	PORTB = 0x00;
 	Tick();
     }
     return 1;
